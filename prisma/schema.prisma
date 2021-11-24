@@ -7,7 +7,7 @@ datasource db {
 }
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 model Account {
@@ -55,4 +55,24 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model City {
+  id             String @id @default(cuid())
+  name           String
+  lat            Float
+  long           Float
+  population     Int
+  startCityGames Game[] @relation("startCity")
+  endCityGames   Game[] @relation("endCity")
+}
+
+model Game {
+  id          String   @id @default(cuid())
+  tripTypes   String[]
+  numRounds   Int
+  startCity   City     @relation("startCity", fields: [startCityId], references: [id])
+  startCityId String
+  endCity     City     @relation("endCity", fields: [endCityId], references: [id])
+  endCityId   String
 }
