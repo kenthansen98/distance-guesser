@@ -27,7 +27,6 @@ const Map = ({ lat, long, route }) => {
 
     return (
         <ReactMapGL
-            className="-z-1"
             {...viewport}
             mapStyle="mapbox://styles/mapbox/streets-v9"
             mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPS_API}

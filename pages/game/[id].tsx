@@ -19,7 +19,7 @@ interface Props {
             type: string;
             coordinates: any;
         };
-    }
+    };
 }
 
 const DynamicMap = dynamic(() => import("../../components/Map"), {
@@ -67,8 +67,24 @@ const Game: React.FC<Props> = ({ game, geojson }) => {
     }
 
     return (
-        <div>
-            <DynamicMap lat={midpoint[0]} long={midpoint[1]} route={geojson} />
+        <div className="absolute">
+            <div className="h-screen w-screen -z-1 absolute">
+                <DynamicMap lat={midpoint[0]} long={midpoint[1]} route={geojson} />
+            </div>
+            <div className="w-screen flex flex-row justify-between">
+                <div className="z-10 m-10 p-5 bg-white rounded shadow-lg flex flex-col">
+                    <h1 className="font-bold text-xl">Round {round + 1}:</h1>
+                    <p>
+                        {game.startCities[0].name} {"-->"}{" "}
+                        {game.endCities[0].name}
+                    </p>
+                </div>
+                <div className="m-10 flex">
+                    <button className="bg-gradient-to-r from-blue-800 to-green-800 text-lg my-auto font-bold p-2 text-white rounded-md shadow-sm transition hover:scale-110">
+                        Enter Guess
+                    </button>
+                </div>
+            </div>
         </div>
     );
 };
@@ -115,7 +131,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     return {
         props: {
             game,
-            geojson
+            geojson,
         },
     };
 };
