@@ -22,16 +22,6 @@ const TravelTypeSelect: React.FC<Props> = ({ onChange }) => {
                         type="checkbox"
                         className="form-checkbox ring-1 ring-gray-700 rounded-sm"
                         name="travelType"
-                        value="transit"
-                        onChange={onChange}
-                    />
-                    <span className="ml-2">Transit</span>
-                </label>
-                <label className="inline-flex items-center ml-6">
-                    <input
-                        type="checkbox"
-                        className="form-checkbox ring-1 ring-gray-700 rounded-sm"
-                        name="travelType"
                         value="walking"
                         onChange={onChange}
                     />

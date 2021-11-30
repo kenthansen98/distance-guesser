@@ -5,15 +5,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const { tripTypes, numRounds } = req.body;
 
     const cities = await prisma.city.findMany();
-    const startCity = cities[Math.floor(Math.random() * cities.length)];
-    const endCity = cities[Math.floor(Math.random() * cities.length)];
+    const startCities = [];
+    const endCities = [];
+    Array(numRounds).fill(0).forEach((round) => {
+        startCities.push(cities[Math.floor(Math.random() * cities.length)]);
+        endCities.push(cities[Math.floor(Math.random() * cities.length)]);
+    });
 
     const result = await prisma.game.create({
         data: {
             tripTypes: tripTypes,
             numRounds: numRounds,
-            startCity: { connect: { id: startCity.id } },
-            endCity: { connect: { id: endCity.id } },
+            startCities: { connect: startCities.map((city) => ({ id: city.id })) },
+            endCities: { connect: endCities.map((city) => ({ id: city.id })) },
         },
     });
 

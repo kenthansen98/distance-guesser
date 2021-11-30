@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import NumRoundsSelect from "./NumRoundsSelect";
 import TravelTypeSelect from "./TravelTypeSelect";
 
-type TripType = "driving" | "transit" | "walking" | "cycling";
+type TripType = "driving" | "walking" | "cycling";
 
 const NewGame = () => {
     const [tripTypes, setTripTypes] = useState<TripType[]>([]);
