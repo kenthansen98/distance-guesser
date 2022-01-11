@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import React, { useState } from "react";
 import Layout from "../../components/Layout";
 import prisma from "../../lib/prisma";
+import Router from "next/router";
 
 interface Props {
     game: Game & {
@@ -50,7 +51,7 @@ const Game: React.FC<Props> = ({ game, tripTypes, geojsons, durations }) => {
             100 - Math.abs(guess / durations[round] - 1) * 100
         );
         setScore(roundScore);
-        setOverallScore(overallScore + roundScore);
+        setOverallScore(Math.ceil((overallScore + roundScore) / (round + 1)));
         setGuessed(true);
         setEnteringGuess(false);
     };
@@ -59,6 +60,16 @@ const Game: React.FC<Props> = ({ game, tripTypes, geojsons, durations }) => {
         setRound(round + 1);
         setGuessed(false);
         setEnteringGuess(false);
+    };
+
+    const onEndGame = async () => {
+        const body = { score: overallScore }
+        await fetch(`api/game/${game.id}`, {
+            method: "POST", 
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+        });
+        await Router.push("/");
     };
 
     if (loading) {
@@ -95,7 +106,11 @@ const Game: React.FC<Props> = ({ game, tripTypes, geojsons, durations }) => {
     return (
         <div className="absolute flex flex-col">
             <div className="bg-gray-600 h-screen w-screen z-0 absolute">
-                <DynamicMap lat={midpoint[0]} long={midpoint[1]} route={geojsons[round]} />
+                <DynamicMap
+                    lat={midpoint[0]}
+                    long={midpoint[1]}
+                    route={geojsons[round]}
+                />
             </div>
             <div className="w-screen flex flex-row justify-between h-1/4">
                 <div className="m-10 p-5 bg-white rounded shadow-lg flex flex-col h-full z-10">
@@ -190,6 +205,14 @@ const Game: React.FC<Props> = ({ game, tripTypes, geojsons, durations }) => {
                             onClick={onNextRound}
                         >
                             Next Round
+                        </button>
+                    )}
+                    {round === game.numRounds - 1 && (
+                        <button
+                            className="bg-gradient-to-r from-blue-800 to-green-800 text-md my-2 mx-auto font-semibold p-2 text-white rounded-md shadow-sm transition hover:scale-105"
+                            onClick={onEndGame}
+                        >
+                            End Game
                         </button>
                     )}
                 </div>

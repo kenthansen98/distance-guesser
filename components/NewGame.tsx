@@ -22,7 +22,7 @@ const NewGame = () => {
         e.preventDefault();
         try {
             const body = { tripTypes, numRounds };
-            const response = await fetch("api/new-game", {
+            const response = await fetch("api/game/new-game", {
                 method: "POST", 
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body),
